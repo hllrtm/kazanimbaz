@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF Yükleyici</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f3f3f3;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            width: 330px;
+            text-align: center;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #005fcc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>PDF Yükle</h2>
+    <input type="file" id="fileInput" accept="application/pdf">
+    <button onclick="uploadPDF()">Gönder</button>
+    <p id="result"></p>
+</div>
+
+<script>
+async function uploadPDF() {
+    const fileInput = document.getElementById('fileInput');
+    if (!fileInput.files.length) {
+        alert("PDF seç kanka");
+        return;
+    }
+
+    const form = new FormData();
+    form.append("file", fileInput.files[0]);
+
+    const res = await fetch("/upload-pdf", {
+        method: "POST",
+        body: form
+    });
+
+    const data = await res.json();
+    document.getElementById("result").innerText = data.message;
+}
+</script>
+
+</body>
+</html>
